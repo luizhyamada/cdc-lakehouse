@@ -1,0 +1,6 @@
+confluent-kafka==2.14.2
+psycopg2-binary==2.9.12
+faker==40.23.0
+dotenv==0.9.9
+boto3==1.43.29
+psycopg2-binary==2.9.12
