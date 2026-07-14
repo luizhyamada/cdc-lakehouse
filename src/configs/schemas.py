@@ -1,4 +1,4 @@
-from pyspark.sql.types import StructType, StructField, StringType, LongType
+from pyspark.sql.types import StructType, StructField, StringType, LongType, FloatType, IntegerType, BooleanType
 
 """"
 This module defines the PySpark SQL schemas used for ingesting Change Data Capture 
@@ -20,6 +20,32 @@ CDC Operation Types Reference ('op' field):
     * 'd' -> Delete
     * 'r' -> Read (Snapshot)
 """
+SOURCE_SCHEMA = StructType([
+    StructField("ts_ms", LongType())
+])
+
+def build_cdc_schema(record_schema: StructType) -> StructType:
+    """
+        Builds the Debezium CDC envelope for a table schema.
+
+        Args:
+            record_schema (StructType):
+                Schema representing the table payload.
+
+        Returns:
+            StructType:
+                Debezium CDC envelope containing:
+                - before
+                - after
+                - source
+                - op
+    """
+    return StructType([
+        StructField("before", record_schema),
+        StructField("after", record_schema),
+        StructField("source", SOURCE_SCHEMA),
+        StructField("op", StringType()),
+    ])
 
 CUSTOMER_RECORD = StructType([
     StructField("customer_id", StringType(), True),
@@ -30,17 +56,20 @@ CUSTOMER_RECORD = StructType([
     StructField("updated_at", LongType(), True),
 ])
 
-SOURCE_SCHEMA = StructType([
-    StructField("ts_ms", LongType(), True)
+PRODUCT_RECORD = StructType([
+    StructField("product_id", StringType()),
+    StructField("product_name", StringType()),
+    StructField("category", StringType()),
+    StructField("brand", StringType()),
+    StructField("price", FloatType()),
+    StructField("stock_quantity", IntegerType()),
+    StructField("active", BooleanType()),
+    StructField("created_at", LongType()),
+    StructField("updated_at", LongType()),
 ])
 
-CUSTOMER_SCHEMA = StructType([
-    StructField("before", CUSTOMER_RECORD, True),
-    StructField("after", CUSTOMER_RECORD, True),
-    StructField("source", SOURCE_SCHEMA, True),
-    StructField("op", StringType(), True),
-])
 
 SCHEMAS_MAP = {
-    "customers": CUSTOMER_SCHEMA
+    "customers": build_cdc_schema(CUSTOMER_RECORD),
+    "products": build_cdc_schema(PRODUCT_RECORD)
 }
