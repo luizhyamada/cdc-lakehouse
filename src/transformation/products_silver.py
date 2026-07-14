@@ -2,7 +2,7 @@ from pyspark.sql import DataFrame, SparkSession
 from pyspark.sql.functions import from_json, col
 
 
-def build_customers_silver(spark: SparkSession, df: DataFrame, schema) -> DataFrame:
+def build_products_silver(spark: SparkSession, df: DataFrame, schema) -> DataFrame:
     """
         Transform a raw Bronze micro-batch into a clean, deduplicated Silver DataFrame.
         
@@ -20,7 +20,10 @@ def build_customers_silver(spark: SparkSession, df: DataFrame, schema) -> DataFr
             coalesce(data.after.brand, data.before.brand) as brand,
             coalesce(data.after.price, data.before.price) as price,
             coalesce(data.after.stock_quantity, data.before.stock_quantity) as stock_quantity,
-            coalesce(data.after.active, data.before.active) as is_active,
+            case 
+                when data.op = 'd' then false
+                else coalesce(data.after.active, data.before.active)
+            end as is_active,
             timestamp_micros(cast(coalesce(data.after.created_at, data.before.created_at) as bigint)) as created_at,
             timestamp_micros(cast(coalesce(data.after.updated_at, data.before.updated_at) as bigint)) as updated_at,
             timestamp_millis(cast(data.source.ts_ms as bigint)) as event_time,
