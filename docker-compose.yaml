@@ -71,6 +71,9 @@ services:
       VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
       KEY_CONVERTER_SCHEMAS_ENABLE: "false"
       VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
+      KAFKA_OPTS: "-Xms512M -Xmx1G"
+      CONNECT_PLUGIN_PATH: "/kafka/connect"
+      CONNECT_PLUGINS: "debezium-connector-postgres"
     networks:
       - data-platform
 
@@ -135,8 +138,8 @@ services:
       - "8090:8080"
     environment:
       SPARK_HOME: /opt/spark
-      SPARK_MASTER_HOST: spark-master
-      SPARK_LOCAL_HOSTNAME: spark-master
+      SPARK_MASTER_IP: 0.0.0.0 
+      SPARK_MASTER_PORT: 7077
       AWS_ACCESS_KEY_ID: ${aws_access_key_id}
       AWS_SECRET_ACCESS_KEY: ${aws_secret_access_key}
       AWS_DEFAULT_REGION: ${aws_default_region}
@@ -168,6 +171,7 @@ services:
       - "8091:8081"
     environment:
       SPARK_HOME: /opt/spark
+      SPARK_LOCAL_IP: 0.0.0.0
       SPARK_LOCAL_HOSTNAME: spark-worker-1
       AWS_ACCESS_KEY_ID: ${aws_access_key_id}
       AWS_SECRET_ACCESS_KEY: ${aws_secret_access_key}
@@ -207,6 +211,7 @@ services:
       - "8092:8081"
     environment:
       SPARK_HOME: /opt/spark
+      SPARK_LOCAL_IP: 0.0.0.0
       SPARK_LOCAL_HOSTNAME: spark-worker-2
       AWS_ACCESS_KEY_ID: ${aws_access_key_id}
       AWS_SECRET_ACCESS_KEY: ${aws_secret_access_key}
