@@ -2,7 +2,6 @@ import logging
 from pyspark.sql import DataFrame
 from configs.schemas import SCHEMAS_MAP
 from common.delta_exists import write_or_create
-# AJUSTE 1: Importando a transformação correta para produtos
 from transformation.products_silver import build_products_silver
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")

@@ -68,8 +68,20 @@ PRODUCT_RECORD = StructType([
     StructField("updated_at", LongType()),
 ])
 
+ORDER_RECORD = StructType([
+    StructField("order_id", StringType()),
+    StructField("customer_id", StringType()),
+    StructField("product_id", StringType()),
+    StructField("quantity", IntegerType()),
+    StructField("unit_price", FloatType()),
+    StructField("amount", FloatType()),
+    StructField("status", StringType()),
+    StructField("created_at", LongType()),
+    StructField("updated_at", LongType()),
+])
 
 SCHEMAS_MAP = {
     "customers": build_cdc_schema(CUSTOMER_RECORD),
-    "products": build_cdc_schema(PRODUCT_RECORD)
+    "products": build_cdc_schema(PRODUCT_RECORD),
+    "orders": build_cdc_schema(ORDER_RECORD)
 }

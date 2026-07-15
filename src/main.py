@@ -3,7 +3,9 @@ import logging
 from common.spark_session import create_session
 from helpers.read_yaml import YamlReader
 from jobs.bronze_pipeline import BronzePipeline
-from jobs.silver_pipeline import SilverPipeline
+from src.jobs.silver_customer_pipeline import SilverPipeline
+from jobs.silver_product_pipeline import SilverPipeline
+from jobs.silver_order_pipeline import SilverPipeline
 
 def main():
     """
