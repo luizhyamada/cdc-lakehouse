@@ -51,7 +51,9 @@ services:
       - data-platform
 
   connect:
-    image: quay.io/debezium/connect:3.5.2.Final
+    build:
+      context: .
+      dockerfile: infra/cdc/connect.dockerfile
     container_name: debezium-connect
     depends_on:
       - kafka
@@ -71,9 +73,7 @@ services:
       VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
       KEY_CONVERTER_SCHEMAS_ENABLE: "false"
       VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
-      KAFKA_OPTS: "-Xms512M -Xmx1G"
-      CONNECT_PLUGIN_PATH: "/kafka/connect"
-      CONNECT_PLUGINS: "debezium-connector-postgres"
+      KAFKA_HEAP_OPTS: "-Xms256M -Xmx768M"
     networks:
       - data-platform
 
@@ -144,7 +144,6 @@ services:
       AWS_SECRET_ACCESS_KEY: ${aws_secret_access_key}
       AWS_DEFAULT_REGION: ${aws_default_region}
     volumes:
-      - ./notebooks:/workspace
       - ./src:/app/src
       - ./metastore:/opt/spark/metastore
     networks:
@@ -179,7 +178,6 @@ services:
       SPARK_WORKER_MEMORY: 2G
       SPARK_WORKER_CORES: 2
     volumes:
-      - ./notebooks:/workspace
       - ./src:/app/src
       - ./metastore:/opt/spark/metastore 
     networks:
@@ -219,44 +217,8 @@ services:
       SPARK_WORKER_MEMORY: 2G
       SPARK_WORKER_CORES: 2
     volumes:
-      - ./notebooks:/workspace
       - ./src:/app/src
       - ./metastore:/opt/spark/metastore 
-    networks:
-      - spark-net
-      - data-platform
-
-  jupyter:
-    image: spark-cdc
-    container_name: jupyter
-    env_file:
-      - .env
-    hostname: jupyter
-    depends_on:
-      - spark-master
-    command: >
-      jupyter lab
-      --ip=0.0.0.0
-      --port=8888
-      --no-browser
-      --allow-root
-      --notebook-dir=/workspace
-      --IdentityProvider.token=''
-    ports:
-      - "8888:8888"
-      - "4040:4040"
-    environment:
-      SPARK_MASTER: spark://spark-master:7077
-      SPARK_HOME: /opt/spark
-      SPARK_LOCAL_HOSTNAME: jupyter
-      PYSPARK_PYTHON: python3
-      AWS_ACCESS_KEY_ID: ${aws_access_key_id}
-      AWS_SECRET_ACCESS_KEY: ${aws_secret_access_key}
-      AWS_DEFAULT_REGION: ${aws_default_region}
-    volumes:
-      - ./notebooks:/workspace
-      - ./src:/app/src
-      - ./metastore:/opt/spark/metastore
     networks:
       - spark-net
       - data-platform
