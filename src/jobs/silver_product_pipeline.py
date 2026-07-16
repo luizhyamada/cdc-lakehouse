@@ -6,7 +6,7 @@ from transformation.products_silver import build_products_silver
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
-class SilverPipeline:
+class ProductsSilverPipeline:
     """
         A pipeline class to manage the transformation and merging of CDC events 
         from the Bronze layer into deduplicated, state-aware Delta tables in the Silver layer.

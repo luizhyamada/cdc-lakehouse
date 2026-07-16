@@ -30,7 +30,8 @@ def write_or_create(
         df: DataFrame, 
         spark: SparkSession, 
         target_path: str, 
-        merge_sql: str, 
+        merge_sql: str,
+        partition_by = None,
         temp_view_name: str = "micro_batch_updates"
 ) -> None:
     """
@@ -45,6 +46,7 @@ def write_or_create(
                 spark (SparkSession): The active Spark session.
                 target_path (str): The destination path of the Delta table.
                 merge_sql (str): The fully resolved SQL string execution for the `MERGE INTO` command.
+                partition_by (str/list, optional): Name of the column or columns to partition the Delta table.
                 temp_view_name (str, optional): The name of the temporary view assigned 
                     to the incoming streaming DataFrame. Defaults to "micro_batch_updates".
                     
@@ -55,7 +57,14 @@ def write_or_create(
  
     if not table_exists(spark, target_path):
         logging.info(f"Delta table not found at {target_path}. Initializing table via overwrite.")
-        df.write.format("delta").mode("overwrite").partitionBy("_ingested_date").save(target_path)
+        
+        writer = df.write.format("delta").mode("overwrite")
+        
+        if partition_by:
+            logging.info(f"Partitioning target table by: {partition_by}")
+            writer = writer.partitionBy(partition_by)
+            
+        writer.save(target_path)
         return
  
     logging.info(f"Delta table found at {target_path}. Executing MERGE operation.")

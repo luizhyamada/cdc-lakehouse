@@ -33,3 +33,5 @@ tables:
     checkpoint_silver: "s3a://cdc-lakehouse-dbz/silver/checkpoints/products"
     schema_name: "products"
 
+gold:
+  base_path: "s3a://cdc-lakehouse-dbz/gold"
