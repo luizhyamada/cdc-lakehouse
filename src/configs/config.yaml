@@ -1,37 +1,37 @@
 topics:
   - topic: "postgres.public.customers"
     table: "customers"
-    bronze_path: "s3a://cdc-lakehouse-dbz/bronze/customers/"
-    checkpoint_bronze: "s3a://cdc-lakehouse-dbz/bronze/checkpoints/customers"
+    bronze_path: ""
+    checkpoint_bronze: ""
     
   - topic: "postgres.public.orders"
     table: "orders"
-    bronze_path: "s3a://cdc-lakehouse-dbz/bronze/orders/"
-    checkpoint_bronze: "s3a://cdc-lakehouse-dbz/bronze/checkpoints/orders"
+    bronze_path: ""
+    checkpoint_bronze: ""
     
   - topic: "postgres.public.products"
     table: "products"
-    bronze_path: "s3a://cdc-lakehouse-dbz/bronze/products/"
-    checkpoint_bronze: "s3a://cdc-lakehouse-dbz/bronze/checkpoints/products"
+    bronze_path: ""
+    checkpoint_bronze: ""
 
 tables:
   - name: "customers"
-    bronze_path: "s3a://cdc-lakehouse-dbz/bronze/customers/"
-    silver_path: "s3a://cdc-lakehouse-dbz/silver/customers/"
-    checkpoint_silver: "s3a://cdc-lakehouse-dbz/silver/checkpoints/customers"
+    bronze_path: ""
+    silver_path: ""
+    checkpoint_silver: ""
     schema_name: "customers"
 
   - name: "orders"
-    bronze_path: "s3a://cdc-lakehouse-dbz/bronze/orders/"
-    silver_path: "s3a://cdc-lakehouse-dbz/silver/orders/"
-    checkpoint_silver: "s3a://cdc-lakehouse-dbz/silver/checkpoints/orders"
+    bronze_path: ""
+    silver_path: ""
+    checkpoint_silver: ""
     schema_name: "orders"
 
   - name: "products"
-    bronze_path: "s3a://cdc-lakehouse-dbz/bronze/products/"
-    silver_path: "s3a://cdc-lakehouse-dbz/silver/products/"
-    checkpoint_silver: "s3a://cdc-lakehouse-dbz/silver/checkpoints/products"
+    bronze_path: ""
+    silver_path: ""
+    checkpoint_silver: ""
     schema_name: "products"
 
 gold:
-  base_path: "s3a://cdc-lakehouse-dbz/gold"
+  base_path: ""
